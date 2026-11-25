@@ -64,7 +64,7 @@ function effectCategoryUpdate(effect, group) {
   const statuses = Array.from(effect.statuses ?? []);
   if (group === "temporary") {
     update.statuses = [...new Set([...statuses, TEMPORARY_STATUS])];
-    if (effect.getFlag(MODULE_ID, "previousShowIcon") === undefined) {
+    if (effect.getFlag(MODULE_ID, "previousShowIcon") == null) {
       update[`flags.${MODULE_ID}.previousShowIcon`] = effect.showIcon ?? 1;
     }
     update.showIcon = 1;
@@ -82,8 +82,9 @@ function effectCategoryUpdate(effect, group) {
     if (statuses.includes(TEMPORARY_STATUS)) {
       update.statuses = statuses.filter(s => s !== TEMPORARY_STATUS);
       const previous = effect.getFlag(MODULE_ID, "previousShowIcon");
-      if (previous !== undefined) update.showIcon = previous;
-      update[`flags.${MODULE_ID}.-=previousShowIcon`] = null;
+      if (previous != null) update.showIcon = previous;
+      // Null means no snapshot. Avoid legacy -= deletion syntax in Foundry V14.
+      update[`flags.${MODULE_ID}.previousShowIcon`] = null;
     }
     if (group === "permanent") update.disabled = false;
   }
@@ -233,9 +234,11 @@ Hooks.once("init", () => {
             img: effect.img || "icons/svg/aura.svg",
             sourceName: effect.source || effect.item?.name || "Actor",
             sourceUuid: effect.item?.uuid || "",
+            showSource: !!(effect.source || effect.item?.name) &&
+              (effect.source || effect.item?.name) !== effect.name,
+            expanded: this._kyraLoadGroupState()[`effects:entry:${effect.uuid}`] ?? false,
             disabled: !!effect.disabled,
             locked: group.id === "permanent" || !editable,
-            deletable: editable && !effect.item && group.id !== "permanent",
             canEnablePermanent: editable && group.id === "permanent" && effect.disabled,
             expired: !!effect.duration?.expired,
             suppressed: !!effect.isSuppressed,
@@ -257,6 +260,13 @@ Hooks.once("init", () => {
         details.addEventListener("toggle", () => {
           if (this.element.contains(details)) {
             this._kyraRememberGroup(`effects:${details.dataset.kyraEffectGroup}`, details.open);
+          }
+        });
+      }
+      for (const details of tab.querySelectorAll("[data-kyra-effect-entry]")) {
+        details.addEventListener("toggle", () => {
+          if (this.element.contains(details)) {
+            this._kyraRememberGroup(`effects:entry:${details.dataset.uuid}`, details.open);
           }
         });
       }

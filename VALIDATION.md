@@ -1,4 +1,11 @@
-# Validation — 0.4.1
+# Validation — 0.4.2
+
+## 0.4.2 checks
+
+- Effect context tests verify duplicate source suppression, initially collapsed entries, and remembered per-effect disclosure state across sheet instances.
+- Template/style checks verify compact summary markup, controls inside the expandable body, retained Edit effect action and removal of the quick-delete control.
+- Category-cycle tests verify that leaving Temporary restores the icon setting and sets its snapshot to null; subsequent cycles capture the latest setting. No update contains the legacy `. -=` deletion-key syntax (without the space), and the effect remains in its parent collection.
+- Existing effect, talent/power and resource tests pass. No visual/live Foundry verification is claimed.
 
 ## 0.4.1 checks
 

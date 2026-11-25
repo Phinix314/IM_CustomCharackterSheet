@@ -30,15 +30,18 @@
           <summary class="kyra-group-heading" title="{{hint}}">{{label}} <span class="kyra-group-count">{{rows.length}}</span></summary>
           <div class="list-content kyra-group-content">
             {{#each rows}}
-              <div class="list-row" data-uuid="{{uuid}}">
-                <div class="kyra-effect-row {{#if disabled}}inactive{{/if}}">
+              <details class="list-row kyra-effect-entry" data-uuid="{{uuid}}" data-kyra-effect-entry {{#if expanded}}open{{/if}}>
+                <summary class="kyra-effect-row {{#if disabled}}inactive{{/if}}" title="Expand or collapse effect controls">
                   <div class="kyra-effect-name">
                     <img src="{{img}}" alt="">
-                    <a class="label" data-action="editEmbedded" data-uuid="{{uuid}}">{{name}}</a>
+                    <span class="label">{{name}}</span>
                   </div>
                   <div class="kyra-effect-state">
                     {{#if disabled}}Off{{else}}{{#if expired}}Expired{{else}}{{#if suppressed}}Suppressed{{else}}On{{/if}}{{/if}}{{/if}}
                   </div>
+                </summary>
+                <div class="kyra-effect-detail">
+                  {{#if showSource}}
                   <div class="kyra-effect-source" title="{{sourceName}}">
                     {{#if sourceUuid}}
                       <a data-action="editEmbedded" data-uuid="{{sourceUuid}}">{{sourceName}}</a>
@@ -46,6 +49,8 @@
                       {{sourceName}}
                     {{/if}}
                   </div>
+                  {{/if}}
+                  <div class="kyra-effect-settings">
                   <select class="kyra-effect-category" aria-label="Category for {{name}}" title="Moving to Permanent enables the effect and locks its sheet toggle. Temporary effects get an active token icon." {{#unless editable}}disabled{{/unless}}>
                     {{#each categories}}
                       <option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>
@@ -61,15 +66,16 @@
                         <button type="button" data-kyra-effect-action="toggle" title="{{toggleHint}}" {{#if locked}}disabled{{/if}}>{{toggleLabel}}</button>
                       {{/if}}
                     {{/if}}
-                    {{#if deletable}}
-                      <a class="list-control" data-action="deleteEmbedded" title="Delete effect"><i class="fas fa-xmark"></i></a>
-                    {{/if}}
                   </div>
+                  </div>
+                  <div class="kyra-effect-edit-links">
+                    <a data-action="editEmbedded" data-uuid="{{uuid}}"><i class="fas fa-pen"></i> Edit effect</a>
+                  </div>
+                  {{#if setup}}<p class="kyra-effect-note">Set up once to start inactive and enable the token icon. Spend 1 Fate manually when activating; turn off at encounter end.</p>{{/if}}
+                  {{#unless disabled}}{{> sheetButtons document=effect}}{{/unless}}
+                  <div class="dropdown-content collapsed"></div>
                 </div>
-                {{#if setup}}<p class="kyra-effect-note">Set up once to start inactive and enable the token icon. Spend 1 Fate manually when activating; turn off at encounter end.</p>{{/if}}
-                {{#unless disabled}}{{> sheetButtons document=effect}}{{/unless}}
-                <div class="dropdown-content collapsed"></div>
-              </div>
+              </details>
             {{else}}
               <p class="kyra-group-empty">No effects in this group.</p>
             {{/each}}

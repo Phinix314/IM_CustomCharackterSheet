@@ -1,4 +1,4 @@
-# Kyra’s Sheet — 0.4.1
+# Kyra’s Sheet — 0.4.2
 
 Optional sheet for Imperium Maledictum 4.1.0, Foundry V14, and Warhammer Library 3.5.1.
 
@@ -6,11 +6,19 @@ Optional sheet for Imperium Maledictum 4.1.0, Foundry V14, and Warhammer Library
 
 1. Stop Foundry and replace `Data/modules/kyra-sheet/` with the ZIP’s `kyra-sheet` folder.
 2. Check that the manifest is directly at `Data/modules/kyra-sheet/module.json`, without another nested folder.
-3. Restart Foundry, refresh the browser, and check that Manage Modules shows version 0.4.1. Keep the module enabled and Kyra’s Sheet selected.
-4. Open Effects. On Unwavering Will click **Set up (off)** once. This configures the existing effect and starts it inactive. It does not spend Fate.
+3. Restart Foundry, refresh the browser, and check that Manage Modules shows version 0.4.2. Keep the module enabled and Kyra’s Sheet selected.
+4. Open Effects. Expand Unwavering Will by clicking its name or arrow. If not already configured, click **Set up (off)** once. This configures the existing effect and starts it inactive. It does not spend Fate. Existing setup is preserved.
 5. Handedness/Augmetics remain on Notes, and Prescience remains on Main. Existing token bars need no setup; the macro below is still available if needed.
 
 No actor re-import is needed. Existing talent categories and power groups remain compatible.
+
+### 0.4.2 compact effect controls and compatibility fix
+
+Each effect starts as one compact header: disclosure arrow, icon, name and On/Off status. Click the header (or focus it and press Enter/Space) to reveal the category dropdown, toggle and Edit effect link. Expanded/collapsed state is remembered per user/browser/actor/effect. A source name identical to the effect name is no longer repeated. Different source names remain available inside the expanded panel. Native script buttons and setup guidance are also inside the panel. The one-click delete control has been removed from this sheet panel; category changes and toggles only update the existing effect.
+
+The supplied console log showed a Foundry V14 compatibility warning for `-=previousShowIcon`. That key removed a saved icon-display preference, not an ActiveEffect document. The update now resets the preference to null, so there is no legacy deletion operator. On the next move to Temporary, the current icon-display setting is captured again. A value of 0 is preserved correctly. The log did not establish that any effect was deleted, so this update does not recreate presumed missing effects.
+
+Implementation: the template wraps each effect in a native `details` element; its `summary` contains only the header. `showSource` omits duplicate source text and `expanded` restores the disclosure flag. `_kyraEffectsUI` saves per-effect disclosure changes through the existing browser preference store. CSS separates the auto-height header from a settings grid inside the collapsible body and explicitly hides that body while closed. `effectCategoryUpdate` treats null/undefined as no saved icon preference, restores a non-null saved value, then writes null instead of deleting the flag. No psychic calculations, XP, Fate or activation state are changed by this patch.
 
 ### 0.4.1 display fix
 
@@ -18,13 +26,13 @@ Effect rows now explicitly show their icon/name, On/Off state, source, category 
 
 ## Effects
 
-The Effects tab has three collapsible groups. A dropdown on each editable effect moves it between them. Effects stay in their category when switched off; each row shows On, Off, Expired or Suppressed.
+The Effects tab has three collapsible groups. Expand an effect's header to access its category dropdown and controls. Effects stay in their category when switched off; each header shows On, Off, Expired or Suppressed.
 
 - **Temporary:** encounter abilities and other temporary effects. Ordinary effects moved here gain a token status icon while active. Changing category does not invent a duration: effects without a timer must be switched off manually. Existing finite timers and real condition statuses are preserved.
 - **Passive:** ongoing effects, with ordinary on/off buttons. Existing passives remain here by default.
 - **Permanent / Access:** starts collapsed. Creation-only scripts such as Psyker and Fated default here. Moving an effect here enables it, and its sheet toggle/delete control is locked. Move it to another group to unlock it. If disabled elsewhere, it shows Off and an Enable button; the sheet never silently overrides an external change.
 
-This lock protects the controls on Kyra’s Sheet, not the native effect editor, GM tools, macros or other sheets. Effects retain their original applicability and source. Editing an item effect edits that actor’s owned item, not the compendium. Source-item links, effect editing, applicable script buttons, conditions and zone effects remain available. Creation-only item effects not normally listed by the system are shown as records; listing or enabling one does not rerun its creation script.
+This lock protects the controls on Kyra’s Sheet, not the native effect editor, GM tools, macros or other sheets. Effects retain their original applicability and source. Editing an item effect edits that actor’s owned item, not the compendium. Distinct source-item links, effect editing, applicable script buttons, conditions and zone effects remain available inside the expanded entry. Creation-only item effects not normally listed by the system are shown as records; listing or enabling one does not rerun its creation script.
 
 Psyker’s supplied effect runs the initial power-selection procedure. It does not control visibility of the Powers tab. Permanent grouping keeps that record out of the working list without deleting it or buying/granting anything again.
 
@@ -119,12 +127,12 @@ Keeps the existing `kyra-sheet` module and sheet identifiers, updates the versio
 - `effectCategoryUpdate` builds one document update. Temporary adds the module status marker, remembers the old icon-display setting and enables icon display. First-time stock Unwavering setup also replaces only its stock script, marks setup complete, uses the eye icon and starts disabled. Moving out removes only the module marker and restores the saved icon setting. Permanent also sets disabled=false. Timers, actual conditions and unrelated scripts are preserved.
 - `_kyraEffects` collects the system’s applicable effects plus visible creation-only item effects, deduplicated by UUID. It does not duplicate documents or attach a new actor effect.
 - `_prepareEffectsContext` keeps the native context, then provides groups, per-effect state, permission-aware controls, category choices and setup hints. Only effects actually stored in their parent collection may be changed; computed effects remain read-only.
-- `_kyraEffectsUI` binds native details disclosure persistence and the nameless category controls/buttons once per rendered Effects tab. It stops these events from submitting the Actor form. Ordinary edit/create/delete buttons use the system’s existing actions.
+- `_kyraEffectsUI` binds native group and individual effect disclosure persistence and the nameless category controls/buttons once per rendered Effects tab. It stops these control events from submitting the Actor form. Ordinary edit/create buttons use the system’s existing actions. The panel has no quick-delete button.
 - `_kyraChangeEffect` resolves the target only within the current actor’s displayed effects; checks actor/sheet/effect ownership and persistence; rejects invalid actions/categories, locked toggles and concurrent writes from the same sheet; prevents turning on an expired effect without editing its timer; writes the update to the original effect; then rerenders Effects. It reports write failures and always clears the busy state. It never changes Fate, XP or item advances.
 
 ### templates/character-effects.hbs and styles/kyra-sheet.css
 
-The Effects template retains the native condition pips and zone-effect selector. It renders the three disclosure groups, effect names/icons, source links, state labels, category selectors, buttons and setup guidance. Source names and labels use normal escaped Handlebars expressions and plain row properties. Original effect-script buttons are retained for enabled effects. CSS uses a two-column, three-row grid: name/state, source, then category/controls. Explicit icon size, flexible name wrapping and automatic row height prevent the native fixed-height row styling from hiding the content. The effect row deliberately has no native `row-content` class. All selectors are scoped to this optional sheet. Main and Notes templates continue to contain their original native form fields.
+The Effects template retains the native condition pips and zone-effect selector. It renders the three disclosure groups and individual expandable effect entries. A header grid contains the arrow, icon/name and status. Its body holds distinct source links, a two-column category/control grid, Edit effect, setup guidance and native script buttons. Source names and labels use normal escaped Handlebars expressions and plain row properties. Explicit icon size, flexible name wrapping and automatic row height prevent native fixed-height row styling from hiding content. The effect row deliberately has no native `row-content` class. All selectors are scoped to this optional sheet. Main and Notes templates continue to contain their original native form fields.
 
 ### scripts/token-bars.js
 

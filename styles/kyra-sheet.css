@@ -108,9 +108,9 @@
 }
 .application.kyra-sheet .kyra-effect-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas: "name state" "source source" "category controls";
-  grid-template-rows: auto auto auto;
+  grid-template-columns: 0.75rem minmax(0, 1fr) auto;
+  grid-template-areas: "chevron name state";
+  grid-template-rows: auto;
   width: 100%;
   height: auto;
   min-height: 0;
@@ -118,7 +118,35 @@
   align-items: center;
   text-align: left;
   gap: 0.25rem 0.4rem;
-  padding: 0.4rem 0.2rem;
+  padding: 0.25rem 0.2rem;
+  list-style: none;
+  cursor: pointer;
+}
+.application.kyra-sheet .kyra-effect-row::-webkit-details-marker { display: none; }
+.application.kyra-sheet .kyra-effect-row::before {
+  grid-area: chevron;
+  content: "▸";
+}
+.application.kyra-sheet .kyra-effect-entry[open] > .kyra-effect-row::before { content: "▾"; }
+.application.kyra-sheet .kyra-effect-row:focus-visible {
+  outline: 2px solid var(--color-border-highlight, #54a7ae);
+  outline-offset: -2px;
+}
+.application.kyra-sheet .kyra-effect-entry:not([open]) > .kyra-effect-detail { display: none; }
+.application.kyra-sheet .kyra-effect-detail {
+  padding: 0.2rem 0.3rem 0.45rem 1.1rem;
+  line-height: 1.4;
+}
+.application.kyra-sheet .kyra-effect-settings {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "category controls";
+  align-items: center;
+  gap: 0.4rem;
+}
+.application.kyra-sheet .kyra-effect-edit-links {
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
 }
 .application.kyra-sheet .kyra-effect-name {
   grid-area: name;
@@ -141,7 +169,7 @@
   font-weight: bold;
 }
 .application.kyra-sheet .kyra-effect-source {
-  grid-area: source;
+  margin-bottom: 0.3rem;
   font-size: 0.8rem;
   opacity: 0.75;
   overflow-wrap: anywhere;
