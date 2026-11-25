@@ -1,0 +1,182 @@
+/* Scope every rule to the optional sheet, preserving other character sheets. */
+.application.kyra-sheet .kyra-prescience > .label,
+.application.kyra-sheet .kyra-prescience > .field {
+  grid-column: 1 / span 12;
+}
+.application.kyra-sheet .kyra-prescience-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+.application.kyra-sheet .kyra-prescience-controls button {
+  flex: 0 0 1.6rem;
+  width: 1.6rem;
+  min-height: 1.6rem;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+.application.kyra-sheet .kyra-prescience-controls input {
+  min-width: 2rem;
+  width: 100%;
+  text-align: center;
+}
+.application.kyra-sheet .kyra-talent-group,
+.application.kyra-sheet .kyra-power-group,
+.application.kyra-sheet .kyra-effect-group {
+  margin: 0.4rem 0;
+  border: 1px solid var(--color-border-light-primary, #65727a);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Preserve the width and alignment of the original power columns at both levels. */
+.application.kyra-sheet .kyra-grouped-powers .kyra-power-content {
+  padding: 0;
+}
+
+.application.kyra-sheet .kyra-discipline-group {
+  margin: 0;
+  border-width: 1px 0 0;
+  border-radius: 0;
+}
+
+.application.kyra-sheet .kyra-discipline-group > .kyra-group-heading {
+  padding-left: 1rem;
+  font-size: 0.95em;
+  background: rgba(127, 127, 127, 0.06);
+}
+
+.application.kyra-sheet .kyra-group-heading {
+  display: list-item;
+  padding: 0.45rem 0.65rem;
+  cursor: pointer;
+  font-weight: bold;
+  background: rgba(127, 127, 127, 0.12);
+  user-select: none;
+}
+
+.application.kyra-sheet .kyra-group-heading:focus-visible {
+  outline: 2px solid var(--color-border-highlight, #54a7ae);
+  outline-offset: -2px;
+}
+
+.application.kyra-sheet .kyra-group-count {
+  float: right;
+  min-width: 1.5rem;
+  padding: 0 0.3rem;
+  text-align: center;
+  border-radius: 0.75rem;
+  background: rgba(127, 127, 127, 0.18);
+  font-size: 0.9em;
+}
+
+.application.kyra-sheet .kyra-group-content {
+  padding: 0.2rem 0.3rem;
+}
+
+.application.kyra-sheet .kyra-group-empty {
+  margin: 0.3rem;
+  font-style: italic;
+  opacity: 0.65;
+}
+
+.application.kyra-sheet .kyra-grouped-talents .row-content > .kyra-talent-category {
+  flex: 0 1 9.5rem;
+  width: 9.5rem;
+  min-width: 6.5rem;
+  height: 1.7rem;
+  margin: 0 0.3rem;
+  padding: 0 0.2rem;
+  font-size: 0.8rem;
+}
+
+.application.kyra-sheet .kyra-grouped-talents .row-content > .list-name {
+  min-width: 0;
+}
+
+.application.kyra-sheet .kyra-grouped-talents .list-header .list-controls {
+  margin-left: 10.1rem;
+}
+
+.application.kyra-sheet .kyra-effect-lists { min-width: 0; }
+.application.kyra-sheet .kyra-effects-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.application.kyra-sheet .kyra-effect-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "name state" "source source" "category controls";
+  grid-template-rows: auto auto auto;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  line-height: 1.4;
+  align-items: center;
+  text-align: left;
+  gap: 0.25rem 0.4rem;
+  padding: 0.4rem 0.2rem;
+}
+.application.kyra-sheet .kyra-effect-name {
+  grid-area: name;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.application.kyra-sheet .kyra-effect-name img {
+  flex: 0 0 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+  border: 0;
+}
+.application.kyra-sheet .kyra-effect-name .label {
+  min-width: 0;
+  font-weight: bold;
+}
+.application.kyra-sheet .kyra-effect-source {
+  grid-area: source;
+  font-size: 0.8rem;
+  opacity: 0.75;
+  overflow-wrap: anywhere;
+}
+.application.kyra-sheet .kyra-effect-category {
+  grid-area: category;
+  width: 100%;
+  min-width: 0;
+  height: 1.8rem;
+  font-size: 0.8rem;
+}
+.application.kyra-sheet .kyra-effect-controls {
+  grid-area: controls;
+  display: flex;
+  width: auto;
+  gap: 0.35rem;
+  align-items: center;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+.application.kyra-sheet .kyra-effect-controls button {
+  width: auto;
+  min-width: 4.5rem;
+  height: 1.8rem;
+  min-height: 0;
+  margin: 0;
+  padding: 0 0.4rem;
+  font-size: 0.8rem;
+}
+.application.kyra-sheet .kyra-effect-state {
+  grid-area: state;
+  font-size: 0.8rem;
+  text-align: right;
+}
+.application.kyra-sheet .kyra-effect-note {
+  margin: 0.2rem 0;
+  font-size: 0.8rem;
+}

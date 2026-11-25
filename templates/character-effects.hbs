@@ -1,0 +1,81 @@
+<section class="tab {{tab.cssClass}}" data-group="primary" data-tab="{{tab.id}}">
+  <div class="flexrow" style="align-items: flex-start">
+    <div class="conditions">
+      {{#each conditions}}
+        <div class="condition">
+          <label>{{this.name}}</label>
+          <div class="pips">
+            {{#each this.pips}}
+              <div data-action="toggleConditionPip" class="pip {{#if this.filled}}filled{{/if}}" data-type="{{this.type}}" data-key="{{../this.id}}"></div>
+            {{/each}}
+          </div>
+        </div>
+      {{/each}}
+      <select class="add-effect">
+        <option>Add Effect</option>
+        {{#each (config "zoneEffects")}}
+          <option value="{{@key}}">{{this.name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class="effect-lists kyra-effect-lists">
+      <div class="kyra-effects-toolbar">
+        <span>Effect groups</span>
+        {{#if kyraCanEditEffects}}
+          <a data-action="createEffect" data-category="passive" title="Create an effect; choose its group afterward"><i class="fas fa-plus"></i> Add effect</a>
+        {{/if}}
+      </div>
+      {{#each kyraEffectGroups}}
+        <details class="sheet-list kyra-effect-group" data-kyra-effect-group="{{id}}" {{#if open}}open{{/if}}>
+          <summary class="kyra-group-heading" title="{{hint}}">{{label}} <span class="kyra-group-count">{{rows.length}}</span></summary>
+          <div class="list-content kyra-group-content">
+            {{#each rows}}
+              <div class="list-row" data-uuid="{{uuid}}">
+                <div class="kyra-effect-row {{#if disabled}}inactive{{/if}}">
+                  <div class="kyra-effect-name">
+                    <img src="{{img}}" alt="">
+                    <a class="label" data-action="editEmbedded" data-uuid="{{uuid}}">{{name}}</a>
+                  </div>
+                  <div class="kyra-effect-state">
+                    {{#if disabled}}Off{{else}}{{#if expired}}Expired{{else}}{{#if suppressed}}Suppressed{{else}}On{{/if}}{{/if}}{{/if}}
+                  </div>
+                  <div class="kyra-effect-source" title="{{sourceName}}">
+                    {{#if sourceUuid}}
+                      <a data-action="editEmbedded" data-uuid="{{sourceUuid}}">{{sourceName}}</a>
+                    {{else}}
+                      {{sourceName}}
+                    {{/if}}
+                  </div>
+                  <select class="kyra-effect-category" aria-label="Category for {{name}}" title="Moving to Permanent enables the effect and locks its sheet toggle. Temporary effects get an active token icon." {{#unless editable}}disabled{{/unless}}>
+                    {{#each categories}}
+                      <option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                  </select>
+                  <div class="list-controls kyra-effect-controls">
+                    {{#if canEnablePermanent}}
+                      <button type="button" data-kyra-effect-action="enablePermanent" title="Restore this disabled permanent effect">Enable</button>
+                    {{else}}
+                      {{#if permanent}}
+                        <span title="Sheet toggle locked. Move to Passive or Temporary to unlock."><i class="fas fa-lock"></i> Locked</span>
+                      {{else}}
+                        <button type="button" data-kyra-effect-action="toggle" title="{{toggleHint}}" {{#if locked}}disabled{{/if}}>{{toggleLabel}}</button>
+                      {{/if}}
+                    {{/if}}
+                    {{#if deletable}}
+                      <a class="list-control" data-action="deleteEmbedded" title="Delete effect"><i class="fas fa-xmark"></i></a>
+                    {{/if}}
+                  </div>
+                </div>
+                {{#if setup}}<p class="kyra-effect-note">Set up once to start inactive and enable the token icon. Spend 1 Fate manually when activating; turn off at encounter end.</p>{{/if}}
+                {{#unless disabled}}{{> sheetButtons document=effect}}{{/unless}}
+                <div class="dropdown-content collapsed"></div>
+              </div>
+            {{else}}
+              <p class="kyra-group-empty">No effects in this group.</p>
+            {{/each}}
+          </div>
+        </details>
+      {{/each}}
+    </div>
+  </div>
+</section>

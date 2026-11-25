@@ -1,0 +1,43 @@
+{
+  "id": "kyra-sheet",
+  "title": "Kyra's Sheet",
+  "description": "An optional Imperium Maledictum sheet with grouped talents, powers and effects, a Prescience counter, and Warp Charge token bars.",
+  "version": "0.4.1",
+  "authors": [
+    {
+      "name": "Kyra's Sheet"
+    }
+  ],
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14",
+    "maximum": "14"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "impmal",
+        "type": "system",
+        "compatibility": {
+          "minimum": "4.1.0"
+        }
+      }
+    ],
+    "requires": [
+      {
+        "id": "warhammer-lib",
+        "type": "module",
+        "compatibility": {
+          "minimum": "3.3.3"
+        }
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/token-bars.js",
+    "scripts/kyra-sheet.js"
+  ],
+  "styles": [
+    "styles/kyra-sheet.css"
+  ]
+}

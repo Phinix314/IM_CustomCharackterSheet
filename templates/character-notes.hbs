@@ -1,0 +1,92 @@
+<section class="tab {{tab.cssClass}}" data-group="primary" data-tab="{{tab.id}}">
+   <div class="flexrow">
+    <div class="attribute-box top-label">
+        <div class="label" style="grid-column: 1 / span 12"><label>{{localize "IMPMAL.Age"}}</label></div>
+        <div class="field" style="grid-column: 1 / span 12"><input type="number" value="{{system.details.age}}" name="system.details.age"></div>
+    </div>
+    <div class="attribute-box top-label">
+        <div class="label" style="grid-column: 1 / span 12"><label>{{localize "IMPMAL.Eyes"}}</label></div>
+        <div class="field" style="grid-column: 1 / span 12"><input type="text" value="{{system.details.eyes}}" name="system.details.eyes"></div>
+    </div>
+    <div class="attribute-box top-label">
+        <div class="label" style="grid-column: 1 / span 12"><label>{{localize "IMPMAL.Hair"}}</label></div>
+        <div class="field" style="grid-column: 1 / span 12"><input type="text" value="{{system.details.hair}}" name="system.details.hair"></div>
+    </div>
+    <div class="attribute-box top-label">
+        <div class="label" style="grid-column: 1 / span 12"><label>{{localize "IMPMAL.Height"}}</label></div>
+        <div class="field" style="grid-column: 1 / span 12"><input type="text" value="{{system.details.height}}" name="system.details.height"></div>
+    </div>
+    <div class="attribute-box top-label">
+        <div class="label" style="grid-column: 1 / span 12"><label>{{localize "IMPMAL.Weight"}}</label></div>
+        <div class="field" style="grid-column: 1 / span 12"><input type="text" value="{{system.details.weight}}" name="system.details.weight"></div>
+    </div>
+</div>
+
+<div class="flexrow kyra-notes-details">
+<div class="attribute-box top-label">
+            <div class="label" style="grid-column: 1 / span 12"><label
+                    class="centered">{{localize "IMPMAL.Handed"}}</label></div>
+            <div class="field" style="grid-column: 1 / span 12">
+                <select name="system.handed">
+                    {{selectOptions hands selected=system.handed localize=true}}
+                </select>
+            </div>
+        </div>
+<div class="attribute-box top-label">
+            <div class="label" style="grid-column: 1 / span 12"><label class="centered">{{localize "IMPMAL.Augmetics"}}</label></div>
+            <div class="field" style="grid-column: 1 / span 6"><input type="number" name="system.augmetics.value"value="{{system.augmetics.value}}" disabled></div>
+            <div class="field" style="grid-column: 7 / span 6"><input type="number" name="system.augmetics.max"value="{{system.augmetics.max}}" disabled></div>
+        </div>
+</div>
+
+<div class="flexrow">
+    <div class="attribute-box top-label">
+        <div class="label" style="grid-column: 1 / span 12"><label>{{localize "IMPMAL.DistinguishingFeatures"}}</label></div>
+        <div class="field" style="grid-column: 1 / span 12"><input type="text" value="{{system.details.feature}}" name="system.details.feature"></div>
+    </div>
+    <div class="attribute-box top-label">
+        <div class="label" style="grid-column: 1 / span 12"><label>{{localize "IMPMAL.Divination"}}</label></div>
+        <div class="field" style="grid-column: 1 / span 12"><input type="text" value="{{system.details.divination}}" name="system.details.divination"></div>
+    </div>
+</div>
+
+<div class="flexrow">
+    <div class="attribute-box top-label">
+        <div class="label" style="grid-column: 1 / span 12"><label>{{localize "IMPMAL.ShortTermGoal"}}</label></div>
+        <div class="field" style="grid-column: 1 / span 12"><input type="text" value="{{system.goal.short}}" name="system.goal.short"></div>
+    </div>
+    <div class="attribute-box top-label">
+        <div class="label" style="grid-column: 1 / span 12"><label>{{localize "IMPMAL.LongTermGoal"}}</label></div>
+        <div class="field" style="grid-column: 1 / span 12"><input type="text" value="{{system.goal.long}}" name="system.goal.long"></div>
+    </div>
+</div>
+    {{#if (isGM)}}
+    <div class="editor-section list-row">
+        <div class="header" data-action="expandRow" data-type="gm">
+            <div>{{localize "IMPMAL.GMNotes"}}</div>
+            <a class="collapse-toggle  {{#unless enriched.system.notes.gm}}inactive{{/unless}}" aria-hidden="true">
+                <i class="fa-solid fa-chevron-down"></i>
+            </a>
+        </div>
+        <div class="dropdown-content {{#unless collapsed.gm}}expanded{{else}}collapsed{{/unless}}">
+            <div class="expander">
+                {{formInput fields.notes.fields.gm value=source.system.notes.gm enriched=enriched.system.notes.gm toggled=true}}
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    <div class="editor-section list-row">
+        <div class="header" data-action="expandRow" data-type="player">
+            <div>{{localize "IMPMAL.Biography"}}</div>
+            <a class="collapse-toggle  {{#unless enriched.system.notes.player}}inactive{{/unless}}" aria-hidden="true">
+                <i class="fa-solid fa-chevron-down"></i>
+            </a>
+        </div>
+        <div class="dropdown-content {{#unless collapsed.player}}expanded{{else}}collapsed{{/unless}}">
+            <div class="expander">
+                {{formInput fields.notes.fields.player value=source.system.notes.player enriched=enriched.system.notes.player toggled=true}}
+            </div>
+        </div>
+    </div>
+</section>
